@@ -13,3 +13,7 @@
 Em seguida, inicie o container: 
 
 ```docker run -dp 3000:3000 apibytevet```
+
+Ao concluir, você pode acessar a API usando:
+
+```localhost:3000```
