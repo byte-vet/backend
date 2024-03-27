@@ -1,5 +1,11 @@
+import express from 'express';
+import { MongoClient, ServerApiVersion } from ('mongodb');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const app = express();
+
+app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
+app.listen(3000, () =>  console.log('Server is running on port 3000'));
+
 const uri = "mongodb+srv://admin:bytevet5@cluster0.dqila1o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
