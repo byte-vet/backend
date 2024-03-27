@@ -1,15 +1,15 @@
 FROM node:21-alpine3.18
 
-RUN mkdir -p /src
+RUN mkdir -p /app/
 
-WORKDIR /src
+WORKDIR /app/src 
 
-COPY ./package.json ./package-lock.json ./ 
+COPY ./package*.json ./ 
 
 RUN npm install
 
-COPY src/ .
+COPY --chown=node:node . .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "start" ]
