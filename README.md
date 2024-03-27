@@ -7,6 +7,28 @@
 <ul><li>Agendamentos de consultas e mais.</li></ul>
 
 ## Como rodar? 
+
+### Manualmente: 
+Instale o node (versão >= 20):
+```
+# installs NVM (Node Version Manager)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+# download and install Node.js
+nvm install 20
+````
+Em seguida instale as dependências com o comando: 
+
+``npm install`` 
+
+Por fim, rode a API com o comando:
+
+``npm start`` 
+
+Ao concluir, você pode acessar a API usando:
+
+```http://localhost:3000```
+
 ### Via Docker:
 ```docker build -t apibytevet .```
 
@@ -16,4 +38,4 @@ Em seguida, inicie o container:
 
 Ao concluir, você pode acessar a API usando:
 
-```localhost:3000```
+```http://localhost:3000```
