@@ -20,7 +20,7 @@ const animalSchema = new mongoose.Schema({
     },
     especie: {
         type: String,
-        //enum: [Object.values(Especies)], 
+        enum: Object.values(Especies),
         required: true
     },
     raca: {
@@ -37,7 +37,7 @@ const animalSchema = new mongoose.Schema({
     },
 });
 
-// Object.assign(animalSchema.statics, { Especies }); 
+Object.assign(animalSchema.statics, { Especies }); 
 
 const animalModel = mongoose.model('Animal', animalSchema);
 
