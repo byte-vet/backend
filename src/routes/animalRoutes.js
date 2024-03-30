@@ -1,9 +1,9 @@
 import express from 'express'; 
-import animalSchema from '../models/animalModel.js';
+import createAnimal from '../controllers/animalController.js';
 
 const router = express.Router();
 
-router.post('/animal');
+router.post('/', createAnimal); // url - http://localhost:3000/animal 
 
 export default router;
 

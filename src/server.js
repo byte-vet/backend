@@ -1,17 +1,19 @@
 import express from 'express';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import dotenv from 'dotenv';
-import animalRoutes from './routes/animalRoutes.js';
 
+import animalRoutes from './routes/animalRoutes.js';
 
 dotenv.config(); 
 
 const app = express();
-app.use('/animal', animalRoutes);
+app.use(express.json());
 
 app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
 app.listen(3000, () =>  console.log('Server is running on port 3000'));
 
+// Routes - Animal 
+app.use('/animal', animalRoutes); // http://localhost:3000/animal
 
 const uri = process.env.DB_URI|| "mongodb+srv://admin:bytevet5@cluster0.dqila1o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 

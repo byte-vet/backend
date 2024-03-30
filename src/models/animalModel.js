@@ -20,7 +20,7 @@ const animalSchema = new mongoose.Schema({
     },
     especie: {
         type: String,
-        enum: [Object.values(Especies)], // Validação de valores permitidos
+        //enum: [Object.values(Especies)], 
         required: true
     },
     raca: {
@@ -37,8 +37,8 @@ const animalSchema = new mongoose.Schema({
     },
 });
 
-Object.assign(animalSchema.statics, { Especies }); // Adiciona o objeto Especies ao modelo
+// Object.assign(animalSchema.statics, { Especies }); 
 
-const Animal = mongoose.model('Animal', animalSchema);
+const animalModel = mongoose.model('Animal', animalSchema);
 
-module.exports = Animal; // Exporta o modelo Animal
+export default animalModel; 
