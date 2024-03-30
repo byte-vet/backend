@@ -1,11 +1,13 @@
 import express from 'express';
-import animalRoutes from './routes/animalRoutes';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import dotenv from 'dotenv';
+import animalRoutes from './routes/animalRoutes.js';
+
 
 dotenv.config(); 
 
 const app = express();
+app.use('/animal', animalRoutes);
 
 app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
 app.listen(3000, () =>  console.log('Server is running on port 3000'));

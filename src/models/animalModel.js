@@ -39,4 +39,6 @@ const animalSchema = new mongoose.Schema({
 
 Object.assign(animalSchema.statics, { Especies }); // Adiciona o objeto Especies ao modelo
 
-module.exports = mongoose.model('animalModel', animalSchema); //
+const Animal = mongoose.model('Animal', animalSchema);
+
+module.exports = Animal; // Exporta o modelo Animal
