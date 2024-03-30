@@ -1,5 +1,5 @@
 import express from 'express';
-import { MongoClient, ServerApiVersion } from ('mongodb');
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const app = express();
 
