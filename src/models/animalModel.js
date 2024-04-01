@@ -1,3 +1,4 @@
+import { UUID } from 'mongodb';
 import mongoose from 'mongoose';
 
 const Especies = Object.freeze(
@@ -39,6 +40,6 @@ const animalSchema = new mongoose.Schema({
 
 Object.assign(animalSchema.statics, { Especies }); 
 
-const animalModel = mongoose.model('Animal', animalSchema);
+const Animal = mongoose.model('Animal', animalSchema);
 
-export default animalModel; 
+export default Animal; 
