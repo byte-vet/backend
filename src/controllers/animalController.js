@@ -10,12 +10,11 @@ const createAnimal = async (req, res) => {
     }
 }
 
-const getAnimal = async(req, res) => {
-    
+const getAnimal = async (req, res) => {
     try {
         const animal = await Animal.findById(req.params.id);
-        if(!animal) {
-            res.status(404).json({ message: `Animal não encontrado com o id ${req.params.id}`});
+        if (!animal) {
+            res.status(404).json({ message: `Animal não encontrado com o id ${req.params.id}` });
         } else {
             res.status(200).send(animal);
         }
@@ -25,10 +24,20 @@ const getAnimal = async(req, res) => {
 
 }
 
-const getAllAnimals = async(req, res) => {
-
+const getAllAnimals = async (req, res) => {
     const animais = await Animal.find();
     res.status(200).send(animais);
 }
 
-export { createAnimal, getAnimal, getAllAnimals };
+const deleteAnimal = async (req, res) => {
+    try {
+        // adicionar tratamento de erros
+        await Animal.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: `Animal com id ${req.params.id} removido com sucesso!` })
+
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export { createAnimal, getAnimal, getAllAnimals, deleteAnimal };
