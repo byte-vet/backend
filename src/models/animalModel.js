@@ -1,4 +1,3 @@
-import { UUID } from 'mongodb';
 import mongoose from 'mongoose';
 
 const Especies = Object.freeze(
