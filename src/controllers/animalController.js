@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 import Animal from '../models/animalModel.js';
 
 const createAnimal = async (req, res) => {
@@ -26,4 +25,10 @@ const getAnimal = async(req, res) => {
 
 }
 
-export { createAnimal, getAnimal };
+const getAllAnimals = async(req, res) => {
+
+    const animais = await Animal.find();
+    res.status(200).send(animais);
+}
+
+export { createAnimal, getAnimal, getAllAnimals };
