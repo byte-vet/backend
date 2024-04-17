@@ -1,9 +1,14 @@
 import Animal from '../models/animalModel.js';
+import Usuario from '../models/userModel.js';
 
 const createAnimal = async (req, res) => {
-    const { nome, especie, raca, idade, peso } = req.body;
+    const { usuario, nome, especie, raca, idade, peso } = req.body;
     try {
-        const newAnimal = await Animal.create({ nome, especie, raca, idade, peso });
+        if (!await Usuario.findById(usuario)) {
+            res.status(404).json({ message: `Usuário com id ${usuario} não encontrado` });
+            return;
+        }
+        const newAnimal = await Animal.create({ usuario, nome, especie, raca, idade, peso });
         res.status(201).json(newAnimal);
     } catch (error) {
         res.status(500).json({ message: error.message });
