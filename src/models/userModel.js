@@ -12,7 +12,12 @@ const userSchema = {
     password: {
         type: String,
         required: true
-    }
+    },
+    pets: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Animal',
+        required: false
+    }],
 }
 
 const User = mongoose.model('User', userSchema);
