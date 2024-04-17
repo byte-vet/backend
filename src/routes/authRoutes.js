@@ -4,8 +4,7 @@ import { checkToken } from '../middlewares/authorization.js';
 
 const router = express.Router();
 
-router.post('/signup', registerUser);
-router.post('/login', loginUser);
-router.get('/users/:id', checkToken, getUser);
+router.post('/signup', registerUser); // http://localhost:3000/auth/signup
+router.post('/login', loginUser); // http://localhost:3000/auth/login
 
 export default router;

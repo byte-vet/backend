@@ -33,7 +33,7 @@ const getAnimal = async (req, res) => {
 
 }
 
-const getAllAnimals = async (req, res) => {
+const getAllAnimals = async (_, res) => {
     const animais = await Animal.find();
     res.status(200).send(animais);
 }
@@ -49,4 +49,17 @@ const deleteAnimal = async (req, res) => {
     }
 }
 
-export { createAnimal, getAnimal, getAllAnimals, deleteAnimal };
+const getAllAnimalsByUser = async (req, res) => {
+    try {
+        const user = await Usuario.findById(req.params.id).populate('pets');
+        if (!user) {
+            res.status(404).json({ message: `Usuário com id ${req.params.id} não encontrado` });
+            return;
+        }
+        res.status(200).json(user.pets);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export { createAnimal, getAnimal, getAllAnimals, deleteAnimal, getAllAnimalsByUser };

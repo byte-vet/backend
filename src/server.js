@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 import animalRoutes from './routes/animalRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ app.listen(3000, () =>  console.log('Server is running on port 3000'));
 // Routes - Animal
 app.use('/animais', animalRoutes); // http://localhost:3000/animais
 app.use('/auth', authRoutes); // http://localhost:3000/auth
-
+app.use('/users', userRoutes); // http://localhost:3000/users
 
 const uri = process.env.DB_URI|| "mongodb+srv://admin:bytevet5@cluster0.dqila1o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
