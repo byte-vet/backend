@@ -18,6 +18,7 @@ app.listen(3000, () =>  console.log('Server is running on port 3000'));
 app.use('/animais', animalRoutes); // http://localhost:3000/animais
 app.use('/auth', authRoutes); // http://localhost:3000/auth
 
+
 const uri = process.env.DB_URI|| "mongodb+srv://admin:bytevet5@cluster0.dqila1o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version

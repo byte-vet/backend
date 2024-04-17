@@ -13,9 +13,9 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'Email já cadastrado.' });
         }
 
-        await User.create({ fullName, email, password: hashedPassword });
+        const user = await User.create({ fullName, email, password: hashedPassword });
         
-        res.status(201).json({message: 'Usuário criado com sucesso!' });
+        res.status(201).json(user);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -36,6 +36,19 @@ const loginUser = async (req, res) => {
     }
 }
 
+/* rota privada */ 
+const getUser = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findById(id, '-password');
+        res.status(200).json(user);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
 
-export { registerUser, loginUser };
+
+
+export { registerUser, loginUser, getUser };
