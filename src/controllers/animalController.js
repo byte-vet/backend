@@ -62,4 +62,32 @@ const getAllAnimalsByUser = async (req, res) => {
     }
 }
 
-export { createAnimal, getAnimal, getAllAnimals, deleteAnimal, getAllAnimalsByUser };
+const deleteAnimalByUser = async (req, res) => {
+    const id_pet = req.params.id_pet;
+    try {
+        const user = await Usuario.findById(req.params.id);
+        if (!user) {
+            res.status(404).json({ message: `Usuário com id ${req.params.id} não encontrado` });
+            return;
+        }
+        const index = user.pets.indexOf(id_pet); 
+        if (index === -1) {
+            res.status(404).json({ message: `Animal com id ${id_pet} não encontrado` });
+            return;
+        }
+        await Animal.findByIdAndDelete(id_pet);
+        user.pets.splice(index, 1);
+        await user.save();
+        res.status(200).json({ message: `Animal com id ${id_pet} removido com sucesso!` });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export { createAnimal, 
+        getAnimal, 
+        getAllAnimals, 
+        deleteAnimal, 
+        getAllAnimalsByUser, 
+        deleteAnimalByUser 
+    };

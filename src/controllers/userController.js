@@ -25,7 +25,7 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        if (user && bcrypt.compare(password, user.password)) {
+        if (user && bcrypt.compare(password, user.password)) { 
             const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, { expiresIn: '1h' });
             return res.status(200).json({ message: 'Login realizado com sucesso!', token });
         } else {
