@@ -1,19 +1,34 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-const vetSchema = {
-    fullName: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    }
-}
+const VeterinarioSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  senha: {
+    type: String,
+    required: true
+  },
+  nome: {
+    type: String,
+    required: true
+  },
+  cpf: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  nomeClinica: {
+    type: String,
+    required: true
+  },
+  localizacaoClinica: {
+    type: String,
+    required: true
+  }
+});
 
-const Vet = mongoose.model('Vet', vetSchema);
-export default Vet;
+const Veterinario = mongoose.model('Veterinario', VeterinarioSchema);
+
+module.exports = Veterinario;
