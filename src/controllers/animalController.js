@@ -63,15 +63,15 @@ const getAllAnimalsByUser = async (req, res) => {
 }
 
 const deleteAnimalByUser = async (req, res) => {
+    const id_user = req.params.id;
     const id_pet = req.params.id_pet;
     try {
-        const user = await Usuario.findById(req.params.id);
+        const user = await Usuario.findById(id_user);
         if (!user) {
-            res.status(404).json({ message: `Usuário com id ${req.params.id} não encontrado` });
+            res.status(404).json({ message: `Usuário com id ${id_user} não encontrado` });
             return;
         }
-        const index = user.pets.indexOf(id_pet); 
-        if (index === -1) {
+        if (!animalExists(id_user, id_pet)) {
             res.status(404).json({ message: `Animal com id ${id_pet} não encontrado` });
             return;
         }
@@ -82,6 +82,14 @@ const deleteAnimalByUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+}
+
+/* Checa se o usuário possui o pet informado */
+const animalExists = (id_user, id_pet) => { 
+    if (Usuario.findOne({ _id: id_user, pets: id_pet }) !== null) {
+        return true;
+    }
+    return false;
 }
 
 export { createAnimal, 
