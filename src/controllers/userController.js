@@ -1,7 +1,9 @@
 import User from '../models/userModel.js';
+import Token from '../models/tokenModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+/* mover funcoes de autenticacao para authController.js */
 const registerUser = async (req, res) => {
     const { fullName, email, password, confirmPassword } = req.body;
     try {
@@ -14,8 +16,18 @@ const registerUser = async (req, res) => {
         }
 
         const user = await User.create({ fullName, email, password: hashedPassword });
+        const token = await Token.create({ userId: user._id, token: jwt.sign({ id: user._id }, process.env.JWT_SECRET) });
         
-        res.status(201).json(user);
+        const data = {
+            user: {
+                _id: user._id,
+                fullName: user.fullName,
+                email: user.email
+            },
+            token: token.token
+        }
+
+        res.status(201).json(data); 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -26,7 +38,7 @@ const loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (user && bcrypt.compareSync(password, user.password)) { // compara a senha informada com a senha criptografada no banco
-            const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET);
             return res.status(200).json({ message: 'Login realizado com sucesso!', token });
         } else {
             return res.status(400).json({ message: 'Email ou senha inválido.' });
@@ -35,6 +47,16 @@ const loginUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+// const resetPassword = async (req, res) => {
+//     const { email } = req.body;
+    
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//         return res.status(400).json({ message: 'Email não cadastrado!' });
+//     }
+// }
+
 
 /* rota privada */ 
 const getUser = async (req, res) => {
