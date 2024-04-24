@@ -8,23 +8,20 @@ const registerUser = async (req, res) => {
     const { fullName, email, password, confirmPassword } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        
         if (password !== confirmPassword) {
             return res.status(400).json({ message: 'As senhas não conferem!' });
-        } else if (await User.findOne({ email  })) {
+        } else if (await User.findOne({ email })) {
             return res.status(400).json({ message: 'Email já cadastrado.' });
         }
 
         const user = await User.create({ fullName, email, password: hashedPassword });
-        const token = await Token.create({ userId: user._id, token: jwt.sign({ id: user._id }, process.env.JWT_SECRET) });
+        const newToken = await Token.create({ userId: user._id, token: jwt.sign({ id: user._id }, process.env.JWT_SECRET) });
         
         const data = {
-            user: {
-                _id: user._id,
+                userId: user._id,
                 fullName: user.fullName,
-                email: user.email
-            },
-            token: token.token
+                email: user.email,
+                token: newToken.token
         }
 
         res.status(201).json(data); 
