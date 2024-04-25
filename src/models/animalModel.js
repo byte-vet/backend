@@ -14,6 +14,11 @@ const Especies = Object.freeze(
 )
 
 const animalSchema = new mongoose.Schema({
+    usuario: { // usuario dono do pet
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
+        required: true
+    },
     nome: {
         type: String,
         required: true

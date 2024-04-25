@@ -3,16 +3,23 @@ import mongoose from 'mongoose';
 const userSchema = {
     fullName: {
         type: String,
+        trim: true,
         required: true
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
         required: true
-    }
+    },
+    pets: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Animal',
+        required: false
+    }],
 }
 
 const User = mongoose.model('User', userSchema);
