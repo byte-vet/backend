@@ -8,6 +8,8 @@ import { createAnimal,
     updateAnimalByUser 
 } from '../controllers/animalController.js';
 
+import { adicionaVacina, listaVacinasDoPet } from '../controllers/vacinaController.js';
+
 const router = express.Router();
 
 /* Rotas relacionadas ao dados do usuario */
@@ -20,5 +22,9 @@ router.get('/:id/pets', checkToken, getAllAnimalsByUser); // http://localhost:30
 router.get('/:id/pets/:id_pet', checkToken, getAnimalByUser); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}
 router.delete('/:id/pets/:id_pet', checkToken, deleteAnimalByUser); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}
 router.put('/:id/pets/:id_pet', checkToken, updateAnimalByUser); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}
+
+/* Rotas relacionadas ao cartao de vacina do pet */
+router.post('/:id/pets/:id_pet/vacinas', checkToken, adicionaVacina); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/vacinas
+router.get('/:id/pets/:id_pet/vacinas', checkToken, listaVacinasDoPet); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/vacinas
 
 export default router;

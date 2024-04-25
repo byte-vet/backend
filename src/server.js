@@ -15,7 +15,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
 app.listen(3000, () =>  console.log('Server is running on port 3000'));
 
-// Routes - Animal
+
 app.use('/animais', animalRoutes); // http://localhost:3000/animais
 app.use('/auth', authRoutes); // http://localhost:3000/auth
 app.use('/users', userRoutes); // http://localhost:3000/users
