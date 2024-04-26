@@ -57,7 +57,6 @@ const requestResetPassword = async (req, res) => {
     }
 
     let token = await Token.findOne({ userId: user._id });
-    console.log(token);
 
     if (token) {
         await token.deleteOne(); // Deleta o token antigo
