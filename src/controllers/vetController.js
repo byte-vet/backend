@@ -1,5 +1,5 @@
 import Vet from '../models/vetModel.js';
-import Token from '../models/tokenModel.js';
+import Token from '../models/vetTokenModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
