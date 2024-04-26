@@ -2,6 +2,8 @@ import User from '../models/userModel.js';
 import Token from '../models/tokenModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import { sendEmail } from '../utils/sendEmail.js';
 
 /* mover funcoes de autenticacao para authController.js */
 const registerUser = async (req, res) => {
@@ -45,14 +47,64 @@ const loginUser = async (req, res) => {
     }
 }
 
-// const resetPassword = async (req, res) => {
-//     const { email } = req.body;
+// WIP - reset password
+const requestResetPassword = async (req, res) => {
+    const { email } = req.body;
     
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//         return res.status(400).json({ message: 'Email não cadastrado!' });
-//     }
-// }
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(400).json({ message: 'Email não cadastrado!' });
+    }
+
+    let token = await Token.findOne({ userId: user._id });
+    console.log(token);
+
+    if (token) {
+        await token.deleteOne(); // Deleta o token antigo
+    }
+    let resetToken = crypto.randomBytes(32).toString('hex'); // Gera um token de 32 bytes
+    const hash = await bcrypt.hash(resetToken, 10); // Criptografa o token
+
+    await Token.create({ userId: user._id, token: hash, createdAt: Date.now() }); // Salva o token no banco
+    
+    const link = `localhost:3000/passwordReset?token=${resetToken}&id=${user._id}`; // futuramente alterar para o domínio do site
+    sendEmail(user.email, 'Recuperação de senha', {name: user.fullName, link: link}, '../utils/template/requestResetPassword.handlebars'); // Envia o email
+
+    console.log(link)
+    res.status(200).json({ message: 'Email enviado!' });
+}
+
+const resetPassword = async (req, res) => {
+    const { id, token, password } = req.body;
+    let passwordResetToken = await Token.findOne({ userId: id });
+    if (!passwordResetToken) {
+        return res.status(400).json({ message: 'Token inválido ou expirado!' });
+    }
+
+    const isValid = await bcrypt.compare(token, passwordResetToken.token);
+    if (!isValid) {
+        return res.status(400).json({ message: 'Token inválido ou expirado!' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.updateOne(
+        { _id: id },
+        { $set: { password: hashedPassword } },
+        { new: true } // Retorna o documento modificado
+    );
+
+    const user = await User.findById( { _id: id });
+    sendEmail(
+        user.email, 
+        'Senha alterada', 
+        {
+            name: user.fullName
+        }, 
+        'Sua senha foi alterada com sucesso!'
+    );
+
+    await passwordResetToken.deleteOne(); // Deleta o token após a senha ser alterada
+}
 
 
 /* rota privada */ 
@@ -70,4 +122,4 @@ const getUser = async (req, res) => {
 
 
 
-export { registerUser, loginUser, getUser };
+export { registerUser, loginUser, getUser, requestResetPassword, resetPassword};
