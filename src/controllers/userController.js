@@ -47,7 +47,7 @@ const loginUser = async (req, res) => {
     }
 }
 
-// WIP - reset password
+
 const requestResetPassword = async (req, res) => {
     const { email } = req.body;
     
@@ -66,13 +66,14 @@ const requestResetPassword = async (req, res) => {
 
     await Token.create({ userId: user._id, token: hash, createdAt: Date.now() }); // Salva o token no banco
     
-    const link = `localhost:3000/passwordReset?token=${resetToken}&id=${user._id}`; // futuramente alterar para o domínio do site
+    const link = `localhost:3000/auth/resetPassword?token=${resetToken}&id=${user._id}`; // futuramente alterar para o domínio do site
     sendEmail(user.email, 'Recuperação de senha', {name: user.fullName, link: link}, '../utils/template/requestResetPassword.handlebars'); // Envia o email
 
     console.log(link)
     res.status(200).json({ message: 'Email enviado!' });
 }
 
+// WIP
 const resetPassword = async (req, res) => {
     const { id, token, password } = req.body;
     let passwordResetToken = await Token.findOne({ userId: id });
@@ -80,7 +81,7 @@ const resetPassword = async (req, res) => {
         return res.status(400).json({ message: 'Token inválido ou expirado!' });
     }
 
-    const isValid = await bcrypt.compare(token, passwordResetToken.token);
+    const isValid = await bcrypt.compareSync(token, passwordResetToken.token);
     if (!isValid) {
         return res.status(400).json({ message: 'Token inválido ou expirado!' });
     }
