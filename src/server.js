@@ -2,6 +2,7 @@ import express from 'express';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 import animalRoutes from './routes/animalRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -10,6 +11,7 @@ import userRoutes from './routes/userRoutes.js';
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => res.status(200).send('API - ByteVet'));

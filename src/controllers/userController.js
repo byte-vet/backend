@@ -36,7 +36,7 @@ const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
         if (user && bcrypt.compareSync(password, user.password)) { // compara a senha informada com a senha criptografada no banco
             const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET);
-            return res.status(200).json({ message: 'Login realizado com sucesso!', token });
+            return res.status(200).json({ message: 'Login realizado com sucesso!', token, id: user._id });
         } else {
             return res.status(400).json({ message: 'Email ou senha inválido.' });
         }
