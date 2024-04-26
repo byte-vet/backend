@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const tokenSchema = {
+const tokenVetSchema = {
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -17,6 +17,5 @@ const tokenSchema = {
     }
 }
 
-const Token = mongoose.model('Token', tokenSchema);
-export default Token;
-
+const TokenVet = mongoose.model('TokenVet', tokenVetSchema); // Renomeado para TokenVet
+export default TokenVet;

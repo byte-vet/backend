@@ -49,11 +49,13 @@ const loginVet = async (req, res) => {
 /* rota privada */ 
 const getVet = async (req, res) => {
     try {
-        const id = req.params.id;
-        const vet = await Vet.findById(id, '-password');
-        res.status(200).json(vet);
-    }
-    catch (error) {
+        const vet = await Veterinario.findById(req.params.id);
+        if (!vet) {
+            res.status(404).json({ message: `Veterinário não encontrado com o id ${req.params.id}` });
+        } else {
+            res.status(200).send(vet);
+        }
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }

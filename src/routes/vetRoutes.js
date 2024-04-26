@@ -1,5 +1,5 @@
 import express from 'express';
-import { createConsulta, createHistorico } from '../controllers/vetController.js';
+import { createConsulta, createHistorico, getVet, updateVet } from '../controllers/vetController.js';
 import { checkToken } from '../middlewares/authorization.js';
 
 const router = express.Router();
