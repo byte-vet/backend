@@ -23,7 +23,7 @@ const VeterinarioSchema = new mongoose.Schema({
     },
     localizacaoClinica: {
       type: String,
-      required: true
+      required: false
     }
 });
 
