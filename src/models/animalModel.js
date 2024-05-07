@@ -2,14 +2,14 @@ import mongoose from 'mongoose';
 
 const Especies = Object.freeze(
     {
-        CACHORRO: 'Cachorro',
-        GATO: 'Gato',
-        PEIXE: 'Peixe',
-        PASSARO: 'Pássaro',
-        COELHO: 'Coelho',
-        ROEDOR: 'Roedor',
-        REPTIL: 'Réptil',
-        OUTRO: 'Outro'
+        CACHORRO: 'cachorro',
+        GATO: 'gato',
+        PEIXE: 'peixe',
+        PASSARO: 'passaro',
+        COELHO: 'coelho',
+        ROEDOR: 'roedor',
+        REPTIL: 'reptil',
+        OUTRO: 'outro'
     }
 )
 
