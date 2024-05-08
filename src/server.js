@@ -2,6 +2,7 @@ import express from 'express';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 import animalRoutes from './routes/animalRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -12,6 +13,9 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+// Configuração do CORS para permitir todas as origens
+app.use(cors());
 
 app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
 app.listen(3000, () =>  console.log('Server is running on port 3000'));

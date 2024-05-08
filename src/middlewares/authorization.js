@@ -10,7 +10,6 @@ export const checkToken = (req, res, next) => {
 
     try {
         const secret = process.env.JWT_SECRET;
-        console.log('Valor da variável JWT_SECRET:', secret);
         jwt.verify(token, secret); // Verifica se o token é válido
         next(); // Se o token for válido, chama a próxima rota
 
