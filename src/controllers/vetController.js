@@ -1,7 +1,9 @@
 import Vet from '../models/vetModel.js';
+import Consulta from '../models/consultaModel.js';
 import Token from '../models/tokenModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 /* mover funcoes de autenticacao para authController.js */
 const registerVet = async (req, res) => {
@@ -15,19 +17,19 @@ const registerVet = async (req, res) => {
         }
 
         const vet = await Vet.create({ fullName, email, password: hashedPassword, nomeClinica });
-        const newToken = await Token.create({ vetId: vet._id, token: jwt.sign({ id: vet._id }, process.env.JWT_SECRET) });
+        const newToken = await Token.create({ userId: vet._id, token: jwt.sign({ id: vet._id }, process.env.JWT_SECRET) });
         console.log(newToken)
         console.log(process.env.JWT_SECRET)
-        
+
         const data = {
-                vetId: vet._id,
-                fullName: vet.fullName,
-                email: vet.email,
-                nomeClinica: vet.nomeClinica,
-                token: newToken.token
+            vetId: vet._id,
+            fullName: vet.fullName,
+            email: vet.email,
+            nomeClinica: vet.nomeClinica,
+            token: newToken.token
         }
 
-        res.status(201).json(data); 
+        res.status(201).json(data);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -38,7 +40,7 @@ const loginVet = async (req, res) => {
     try {
         const vet = await Vet.findOne({ email });
         if (vet && bcrypt.compareSync(password, vet.password)) { // compara a senha informada com a senha criptografada no banco
-            const token = jwt.sign({ id: vet._id}, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: vet._id }, process.env.JWT_SECRET);
             return res.status(200).json({ message: 'Login realizado com sucesso!', token });
         } else {
             return res.status(400).json({ message: 'Email ou senha inválido.' });
@@ -48,10 +50,11 @@ const loginVet = async (req, res) => {
     }
 }
 
-/* rota privada */ 
+/* rota privada */
 const getVet = async (req, res) => {
     try {
-        const vet = await Veterinario.findById(req.params.id);
+        const vet = await Vet.findById(req.params.id);
+
         if (!vet) {
             res.status(404).json({ message: `Veterinário não encontrado com o id ${req.params.id}` });
         } else {
@@ -87,7 +90,7 @@ const updateVet = async (req, res) => {
 
         await Vet.findByIdAndUpdate(id, req.body, { new: true });
 
-        const data = { 
+        const data = {
             fullName: req.body.fullName || vet.fullName,
             email: req.body.email || vet.email
         }
@@ -99,22 +102,31 @@ const updateVet = async (req, res) => {
 
 const createConsulta = async (req, res) => {
     const { animalId, data, motivo, diagnostico } = req.body;
+    const vetId = req.params.id;
 
     try {
-        const Consulta = mongoose.model('Consulta', {
-            animalId: mongoose.Schema.Types.ObjectId,
-            data: Date,
-            motivo: String,
-            diagnostico: String
-        });
 
-        const consulta = new Consulta({ animalId, data, motivo, diagnostico });
+        const consulta = new Consulta({ animalId, vetId, data, motivo, diagnostico });
         await consulta.save();
-        
+
         res.status(201).json(consulta);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+}
+
+const getConsultas = async (req, res) => {
+    const vetId = req.params.id
+
+    try {
+        const consultas = await Consulta.find({ vetId: vetId })
+
+        res.status(200).json(consultas)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+
+
 }
 
 const createHistorico = async (req, res) => {
@@ -129,11 +141,11 @@ const createHistorico = async (req, res) => {
 
         const historico = new Historico({ animalId, data, descricao });
         await historico.save();
-        
+
         res.status(201).json(historico);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 
-export { registerVet, loginVet, getVet, updateVet, createConsulta, createHistorico };
+export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico };
