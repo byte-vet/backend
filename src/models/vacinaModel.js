@@ -11,7 +11,7 @@ const vacinaSchema = {
         required: true,
     },
     dataDeAplicacao: {
-        type: Date,
+        type: String, // trocar para Date
         required: true,
     }
 };
