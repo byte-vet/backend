@@ -148,4 +148,14 @@ const createHistorico = async (req, res) => {
     }
 }
 
-export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico };
+const getAllVets = async (req, res) => {
+    try {
+        const vets = await Vet.find();
+        res.status(200).json(vets);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico, getAllVets };
