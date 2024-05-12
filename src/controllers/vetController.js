@@ -17,7 +17,7 @@ const registerVet = async (req, res) => {
         }
 
         const vet = await Vet.create({ fullName, email, password: hashedPassword, nomeClinica });
-        const newToken = await Token.create({ userId: vet._id, token: jwt.sign({ id: vet._id }, process.env.JWT_SECRET) });
+        const newToken = await Token.create({ vetId: vet._id, token: jwt.sign({ id: vet._id }, process.env.JWT_SECRET) });
         console.log(newToken)
         console.log(process.env.JWT_SECRET)
 
@@ -41,7 +41,7 @@ const loginVet = async (req, res) => {
         const vet = await Vet.findOne({ email });
         if (vet && bcrypt.compareSync(password, vet.password)) { // compara a senha informada com a senha criptografada no banco
             const token = jwt.sign({ id: vet._id }, process.env.JWT_SECRET);
-            return res.status(200).json({ message: 'Login realizado com sucesso!', token });
+            return res.status(200).json({ message: 'Login realizado com sucesso!', token, id: vet._id });
         } else {
             return res.status(400).json({ message: 'Email ou senha inválido.' });
         }
