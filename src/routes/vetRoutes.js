@@ -1,5 +1,5 @@
 import express from 'express';
-import { createConsulta, getConsultas, createHistorico, getVet, updateVet } from '../controllers/vetController.js';
+import { createConsulta, getConsultas, createHistorico, getVet, updateVet, getAllVets } from '../controllers/vetController.js';
 import { checkToken } from '../middlewares/authorization.js';
 
 const router = express.Router();
@@ -10,5 +10,7 @@ router.put('/:id/', checkToken, updateVet); // http://localhost:3000/users/{{id_
 router.post('/:id/consulta', checkToken, createConsulta); // http://localhost:3000/vet/{{id_vet}}/consulta
 router.get('/:id/consulta', checkToken, getConsultas);
 router.post('/historico', checkToken, createHistorico); // http://localhost:3000/vet/historico
+router.get('/', checkToken, getAllVets); // Rota para retornar todos os veterinários cadastrados
+
 
 export default router;
