@@ -4,6 +4,7 @@ import Token from '../models/tokenModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import Animal from '../models/animalModel.js';
 
 /* mover funcoes de autenticacao para authController.js */
 const registerVet = async (req, res) => {
@@ -157,5 +158,14 @@ const getAllVets = async (req, res) => {
     }
 }
 
+const getAllAnimals = async (req, res) => {
+    try {
+        const animais = await Animal.find();
+        res.status(200).json(animais);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
-export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico, getAllVets };
+
+export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico, getAllVets, getAllAnimals };
