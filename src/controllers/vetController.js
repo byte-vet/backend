@@ -116,6 +116,21 @@ const createConsulta = async (req, res) => {
     }
 }
 
+const getConsultaById = async (req, res) => {
+    try {
+        const { id } = req.params;  // Pega o ID da consulta da URL
+        const consulta = await Consulta.findById(id);  // Busca a consulta pelo ID
+
+        if (!consulta) {
+            return res.status(404).json({ message: 'Consulta not found' });
+        }
+
+        res.json(consulta);  // Retorna a consulta encontrada
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const getConsultas = async (req, res) => {
     const vetId = req.params.id
 
@@ -168,4 +183,4 @@ const getAllAnimals = async (req, res) => {
 }
 
 
-export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico, getAllVets, getAllAnimals };
+export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultaById, getConsultas, createHistorico, getAllVets, getAllAnimals };
