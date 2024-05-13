@@ -118,9 +118,12 @@ const createConsulta = async (req, res) => {
 
 const getConsultaById = async (req, res) => {
     try {
-        const { id } = req.params;  // Pega o ID da consulta da URL
-        const consulta = await Consulta.findById(id);  // Busca a consulta pelo ID
+        const id_vet = req.params.id;  // Pega o ID da consulta da URL
+        const id_consulta = req.params.idConsulta;
+        const consulta = await Consulta.findOne({ _id: id_consulta, vetId: id_vet });  // Busca a consulta pelo ID
 
+        //const consulta = await Consulta.findById(id);  // Busca a consulta pelo ID
+        console.log(id_consulta);
         if (!consulta) {
             return res.status(404).json({ message: 'Consulta not found' });
         }

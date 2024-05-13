@@ -12,7 +12,7 @@ router.get('/:id/consulta', checkToken, getConsultas);
 router.post('/historico', checkToken, createHistorico); // http://localhost:3000/vet/historico
 router.get('/', checkToken, getAllVets); // http://localhost:3000/vet/
 router.get('/animais', checkToken, getAllAnimals); // http://localhost:3000/vet/animais
-router.get('/:consultaId/consulta', checkToken, getConsultaById);
+router.get('/:id/consulta/:idConsulta', checkToken, getConsultaById);
 
 
 
