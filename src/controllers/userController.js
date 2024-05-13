@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { sendEmail } from '../utils/sendEmail.js';
+import Consulta from '../models/consultaModel.js';
 
 /* mover funcoes de autenticacao para authController.js */
 const registerUser = async (req, res) => {
@@ -156,5 +157,52 @@ const updateUser = async (req, res) => {
     }
 }
 
-export { registerUser, loginUser, getUser, updateUser, requestResetPassword, resetPassword }; 
+const createConsulta = async (req, res) => {
+    const { animalId, data, motivo, diagnostico } = req.body;
+    const userId = req.params.id;
+
+    try {
+        const consulta = new Consulta({ animalId, userId, data, motivo, diagnostico });
+        await consulta.save();
+
+        res.status(201).json(consulta);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const getConsultaById = async (req, res) => {
+    try {
+        const id_user = req.params.id;
+        const id_consulta = req.params.idConsulta;
+        const consulta = await Consulta.findOne({ _id: id_consulta, userId: id_user });
+
+        if (!consulta) {
+            return res.status(404).json({ message: 'Consulta not found' });
+        }
+
+        res.json(consulta);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getConsultasByAnimal = async (req, res) => {
+    const userId = req.params.id;
+    const animalId = req.params.animalId;
+    try {
+        const consultas = await Consulta.find({ userId, animalId });
+
+        if (!consultas) {
+            return res.status(404).json({ message: `Consultas not found for user with id ${userId} and animal id ${animalId}` });
+        }
+
+        res.status(200).json(consultas);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+export { registerUser, loginUser, getUser, updateUser, requestResetPassword, resetPassword, createConsulta, getConsultaById, getConsultasByAnimal }; 
 
