@@ -40,6 +40,11 @@ const animalSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    cartaoDeVacina: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vacina',
+        required: false
+    }]
 });
 
 Object.assign(animalSchema.statics, { Especies }); 

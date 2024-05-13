@@ -4,6 +4,7 @@ import Token from '../models/tokenModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import Animal from '../models/animalModel.js';
 
 /* mover funcoes de autenticacao para authController.js */
 const registerVet = async (req, res) => {
@@ -17,7 +18,7 @@ const registerVet = async (req, res) => {
         }
 
         const vet = await Vet.create({ fullName, email, password: hashedPassword, nomeClinica });
-        const newToken = await Token.create({ userId: vet._id, token: jwt.sign({ id: vet._id }, process.env.JWT_SECRET) });
+        const newToken = await Token.create({ vetId: vet._id, token: jwt.sign({ id: vet._id }, process.env.JWT_SECRET) });
         console.log(newToken)
         console.log(process.env.JWT_SECRET)
 
@@ -41,7 +42,7 @@ const loginVet = async (req, res) => {
         const vet = await Vet.findOne({ email });
         if (vet && bcrypt.compareSync(password, vet.password)) { // compara a senha informada com a senha criptografada no banco
             const token = jwt.sign({ id: vet._id }, process.env.JWT_SECRET);
-            return res.status(200).json({ message: 'Login realizado com sucesso!', token });
+            return res.status(200).json({ message: 'Login realizado com sucesso!', token, id: vet._id });
         } else {
             return res.status(400).json({ message: 'Email ou senha inválido.' });
         }
@@ -148,4 +149,23 @@ const createHistorico = async (req, res) => {
     }
 }
 
-export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico };
+const getAllVets = async (req, res) => {
+    try {
+        const vets = await Vet.find();
+        res.status(200).json(vets);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const getAllAnimals = async (req, res) => {
+    try {
+        const animais = await Animal.find();
+        res.status(200).json(animais);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultas, createHistorico, getAllVets, getAllAnimals };
