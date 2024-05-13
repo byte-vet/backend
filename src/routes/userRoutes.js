@@ -1,14 +1,11 @@
 import express from 'express';
-import { getUser, updateUser } from '../controllers/userController.js';
+import { getUser, updateUser, createConsulta, getConsultaById, getConsultasByAnimal } from '../controllers/userController.js';
 import { checkToken } from '../middlewares/authorization.js';
 import { createAnimal, 
     getAllAnimalsByUser, 
     deleteAnimalByUser, 
     getAnimalByUser, 
-    updateAnimalByUser,
-    createConsulta, 
-    getConsultaById, 
-    getConsultasByAnimal
+    updateAnimalByUser
 } from '../controllers/animalController.js';
 import { getAllConsultasByAnimal } from '../controllers/vetController.js';
 
