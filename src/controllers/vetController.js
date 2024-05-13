@@ -185,5 +185,16 @@ const getAllAnimals = async (req, res) => {
     }
 }
 
+const getAnimal = async (req, res) => {
+    try {
+        const animal = await Animal.findById(req.params.id);
+        if (!animal) {
+            return res.status(404).json({ message: `Animal not found with id ${req.params.id}` });
+        }
+        res.status(200).json(animal);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultaById, getConsultas, createHistorico, getAllVets, getAllAnimals };
+export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultaById, getConsultas, createHistorico, getAllVets, getAllAnimals, getAnimal };

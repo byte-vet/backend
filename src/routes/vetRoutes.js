@@ -1,5 +1,5 @@
 import express from 'express';
-import { createConsulta, getConsultas, createHistorico, getVet, updateVet, getAllVets, getAllAnimals, getConsultaById } from '../controllers/vetController.js';
+import { createConsulta, getConsultas, createHistorico, getVet, updateVet, getAllVets, getAllAnimals, getConsultaById, getAnimal } from '../controllers/vetController.js';
 import { checkToken } from '../middlewares/authorization.js';
 
 const router = express.Router();
@@ -13,6 +13,7 @@ router.post('/historico', checkToken, createHistorico); // http://localhost:3000
 router.get('/', checkToken, getAllVets); // http://localhost:3000/vet/
 router.get('/animais', checkToken, getAllAnimals); // http://localhost:3000/vet/animais
 router.get('/:id/consulta/:idConsulta', checkToken, getConsultaById);
+router.get('/animais/:id', checkToken, getAnimal); // Correct route to fetch a specific animal by ID
 
 
 
