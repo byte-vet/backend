@@ -65,7 +65,7 @@ const requestResetPassword = async (req, res) => {
 
     const newToken = await Token.create({ userId: user._id, token: hash, createdAt: Date.now() }); // Salva o token no banco
     
-    const link = `https://backend-ks2k.onrender.com/auth/resetPassword?token=${resetToken}&id=${user._id}`; // futuramente alterar para o domínio do site
+    const link = `https://bytevet.vercel.app/reset-password?token=${resetToken}&id=${user._id}`; // futuramente alterar para o domínio do site
     sendEmail(user.email, 'Recuperação de senha', {name: user.fullName, link: link}, '../utils/template/requestResetPassword.handlebars'); // Envia o email
 
     console.log(link)
