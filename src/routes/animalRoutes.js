@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/', checkToken, createAnimal); // url - http://localhost:3000/animais
 router.get('/:id', getAnimal);  // url - http://localhost:3000/animais/{id}
 router.get('/', getAllAnimals); // url - http://localhost:3000/animais
-router.delete('/:id', deleteAnimal); 
+router.delete('/:id', deleteAnimal); // url - http://localhost:3000/animais/{id}
 
 export default router;
 
