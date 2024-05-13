@@ -1,11 +1,11 @@
 import express from 'express';
-import { getUser, updateUser } from '../controllers/userController.js';
+import { getUser, updateUser, createConsulta, getConsultaById, getConsultasByAnimal } from '../controllers/userController.js';
 import { checkToken } from '../middlewares/authorization.js';
 import { createAnimal, 
     getAllAnimalsByUser, 
     deleteAnimalByUser, 
     getAnimalByUser, 
-    updateAnimalByUser 
+    updateAnimalByUser
 } from '../controllers/animalController.js';
 import { getAllConsultasByAnimal } from '../controllers/vetController.js';
 
@@ -28,4 +28,10 @@ router.put('/:id/pets/:id_pet', checkToken, updateAnimalByUser); // http://local
 router.post('/:id/pets/:id_pet/vacinas', checkToken, adicionaVacina); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/vacinas
 router.get('/:id/pets/:id_pet/vacinas', checkToken, listaVacinasDoPet); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/vacinas
 router.get('/:id/pets/:id_pet/consultas', checkToken, getAllConsultasByAnimal); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/consultas
+
+// Novas rotas para consultas
+router.post('/:id/consultas', checkToken, createConsulta); // http://localhost:3000/users/{{id_usuario}}/consultas
+router.get('/:id/consultas/:idConsulta', checkToken, getConsultaById); // http://localhost:3000/users/{{id_usuario}}/consultas/{{idConsulta}}
+router.get('/:id/pets/:animalId/consultas', checkToken, getConsultasByAnimal); // http://localhost:3000/users/{{id_usuario}}/pets/{{animalId}}/consultas
+
 export default router;
