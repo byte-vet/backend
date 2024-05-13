@@ -1,5 +1,13 @@
 import express from 'express';
-import { createConsulta, getConsultas, createHistorico, getVet, updateVet, getAllVets, getAllAnimals, getConsultaById, getAnimal } from '../controllers/vetController.js';
+import { createConsulta, 
+    getConsultas, 
+    createHistorico, 
+    getVet, 
+    updateVet, 
+    getAllVets, 
+    getAllAnimals, 
+    getConsultaById, 
+    getAnimal } from '../controllers/vetController.js';
 import { checkToken } from '../middlewares/authorization.js';
 
 const router = express.Router();

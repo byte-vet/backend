@@ -197,4 +197,32 @@ const getAnimal = async (req, res) => {
     }
 };
 
-export { registerVet, loginVet, getVet, updateVet, createConsulta, getConsultaById, getConsultas, createHistorico, getAllVets, getAllAnimals, getAnimal };
+const getAllConsultasByAnimal = async (req, res) => {
+    const id = req.params.id;
+    const id_pet = req.params.id_pet;
+    try {
+        const consultas = await Consulta.find({ animalId: id_pet });
+
+        if (!consultas) {
+            return res.status(404).json({ message: `Consultas not found with animal id ${req.params.id}` });
+        }
+        res.status(200).json(consultas);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export { 
+    registerVet, 
+    loginVet, 
+    getVet, 
+    updateVet, 
+    createConsulta, 
+    getConsultaById, 
+    getConsultas, 
+    createHistorico, 
+    getAllVets, 
+    getAllAnimals, 
+    getAnimal,
+    getAllConsultasByAnimal
+};
