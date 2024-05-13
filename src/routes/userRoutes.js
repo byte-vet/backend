@@ -7,6 +7,7 @@ import { createAnimal,
     getAnimalByUser, 
     updateAnimalByUser 
 } from '../controllers/animalController.js';
+import { getAllConsultasByAnimal } from '../controllers/vetController.js';
 
 import { adicionaVacina, listaVacinasDoPet } from '../controllers/vacinaController.js';
 
@@ -26,5 +27,5 @@ router.put('/:id/pets/:id_pet', checkToken, updateAnimalByUser); // http://local
 /* Rotas relacionadas ao cartao de vacina do pet */
 router.post('/:id/pets/:id_pet/vacinas', checkToken, adicionaVacina); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/vacinas
 router.get('/:id/pets/:id_pet/vacinas', checkToken, listaVacinasDoPet); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/vacinas
-
+router.get('/:id/pets/:id_pet/consultas', checkToken, getAllConsultasByAnimal); // http://localhost:3000/users/{{id_usuario}}/pets/{{id_pet}}/consultas
 export default router;
