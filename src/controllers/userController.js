@@ -64,24 +64,27 @@ const requestResetPassword = async (req, res) => {
     let resetToken = crypto.randomBytes(32).toString('hex'); // Gera um token de 32 bytes
     const hash = await bcrypt.hash(resetToken, 10); // Criptografa o token
 
-    await Token.create({ userId: user._id, token: hash, createdAt: Date.now() }); // Salva o token no banco
+    const newToken = await Token.create({ userId: user._id, token: hash, createdAt: Date.now() }); // Salva o token no banco
     
     const link = `localhost:3000/auth/resetPassword?token=${resetToken}&id=${user._id}`; // futuramente alterar para o domínio do site
     sendEmail(user.email, 'Recuperação de senha', {name: user.fullName, link: link}, '../utils/template/requestResetPassword.handlebars'); // Envia o email
 
     console.log(link)
-    res.status(200).json({ message: 'Email enviado!' });
+    res.status(200).json({ message: 'Email enviado!', newToken });
 }
 
-// WIP
 const resetPassword = async (req, res) => {
-    const { id, token, password } = req.body;
+    const { id, token, password, confirmPassword } = req.body;
     let passwordResetToken = await Token.findOne({ userId: id });
     if (!passwordResetToken) {
         return res.status(400).json({ message: 'Token inválido ou expirado!' });
     }
 
-    const isValid = await bcrypt.compareSync(token, passwordResetToken.token);
+    if (password !== confirmPassword) {
+        return res.status(400).json({ message: 'As senhas não conferem!' });
+    }
+
+    const isValid = bcrypt.compareSync(token, passwordResetToken.token);
     if (!isValid) {
         return res.status(400).json({ message: 'Token inválido ou expirado!' });
     }
@@ -100,10 +103,11 @@ const resetPassword = async (req, res) => {
         {
             name: user.fullName
         }, 
-        'Sua senha foi alterada com sucesso!'
+        '../utils/template/resetPassword.handlebars'
     );
 
     await passwordResetToken.deleteOne(); // Deleta o token após a senha ser alterada
+    res.status(200).json({ message: 'Senha alterada com sucesso!' });
 }
 
 
