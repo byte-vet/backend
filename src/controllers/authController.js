@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { sendEmail } from '../utils/sendEmail.js';
 
+
 const registerUser = async (req, res) => {
     const { fullName, email, password, confirmPassword } = req.body;
     try {
@@ -16,7 +17,11 @@ const registerUser = async (req, res) => {
         }
 
         const user = await User.create({ fullName, email, password: hashedPassword });
-        const newToken = await Token.create({ userId: user._id, token: jwt.sign({ id: user._id }, process.env.JWT_SECRET) });
+
+        // let verifyEmailToken = crypto.randomBytes(32).toString('hex'); 
+        // const hash = await bcrypt.hash(verifyEmailToken, 10); 
+
+        const newToken = await Token.create({ userId: user._id, token: jwt.sign({ email: user.email, _id: user._id}, process.env.JWT_SECRET) });
         
         const data = {
                 userId: user._id,
@@ -25,11 +30,17 @@ const registerUser = async (req, res) => {
                 token: newToken.token
         }
 
+        const link = `https://bytevet.vercel.app/verify-email?token=${newToken.token}&id=${user._id}`; 
+
+        sendEmail(user.email, 'Verificação de conta', {name: user.fullName, link: link}, '../utils/template/emailVerification.handlebars'); // Envia o email
+
+        console.log(link);
         res.status(201).json(data); 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
+
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
