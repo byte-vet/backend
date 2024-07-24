@@ -41,6 +41,28 @@ const registerUser = async (req, res) => {
     }
 }
 
+const emailVerification = async (req, res) => {
+    try { 
+        const user = await User.findOne({ _id: req.params.id });
+        if (!user) {
+            return res.status(400).json({ message: 'Usuário não encontrado!' });
+        }
+        const token = await Token.findOne({ userId: user._id, token: req.params.token});
+
+        if (!token) {
+            return res.status(400).json({ message: 'Token inválido!' });
+        }
+
+        await User.updateOne( { _id: user._id }, { $set: { isVerified: true } });
+        await token.deleteOne();
+
+        res.status(200).json({ message: 'Email verificado com sucesso!' });
+    
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -119,4 +141,4 @@ const resetPassword = async (req, res) => {
     res.status(200).json({ message: 'Senha alterada com sucesso!' });
 }
 
-export { registerUser, loginUser, requestResetPassword, resetPassword };
+export { registerUser, emailVerification, loginUser, requestResetPassword, resetPassword };
