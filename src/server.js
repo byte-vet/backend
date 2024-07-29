@@ -17,14 +17,18 @@ app.use(express.json());
 // Configuração do CORS para permitir todas as origens
 app.use(cors());
 
-app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
-app.listen(3000, () =>  console.log('Server is running on port 3000'));
+// Servir arquivos estáticos da pasta "uploads"
+app.use('/uploads', express.static('uploads'));
 
+app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
 
 app.use('/animais', animalRoutes); // http://localhost:3000/animais
 app.use('/auth', authRoutes); // http://localhost:3000/auth
 app.use('/users', userRoutes); // http://localhost:3000/users
 app.use('/vet', vetRoutes); // Utilize as rotas do veterinário
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 const uri = process.env.DB_URI || "mongodb+srv://admin:bytevet5@cluster0.dqila1o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -39,7 +43,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server    (optional starting in v4.7)
+    // Connect the client to the server (optional starting in v4.7)
     await mongoose.connect(uri);
     // Send a ping to confirm a successful connection
     await client.db().command({ ping: 1 });
