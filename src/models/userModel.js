@@ -15,6 +15,10 @@ const userSchema = {
         type: String,
         required: true
     },
+    verified: {
+        type: Boolean,
+        default: false
+    },
     pets: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Animal',

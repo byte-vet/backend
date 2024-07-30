@@ -6,6 +6,9 @@
 <ul><li>Notificações personalizadas com informações como lembretes de vacinação e consultas;</li></ul>
 <ul><li>Agendamentos de consultas e mais.</li></ul>
 
+## Documentação da API
+https://documenter.getpostman.com/view/19816788/2sA3Bq3WGp
+
 ## Como rodar? 
 
 ### Manualmente: 
