@@ -18,9 +18,6 @@ const registerUser = async (req, res) => {
 
         const user = await User.create({ fullName, email, password: hashedPassword });
 
-        // let verifyEmailToken = crypto.randomBytes(32).toString('hex'); 
-        // const hash = await bcrypt.hash(verifyEmailToken, 10); 
-
         const newToken = await Token.create({ userId: user._id, token: jwt.sign({ email: user.email, _id: user._id}, process.env.JWT_SECRET) });
         
         const data = {
@@ -42,13 +39,15 @@ const registerUser = async (req, res) => {
 }
 
 const emailVerification = async (req, res) => {
+    const id = req.query.id; 
+    const tokenId = req.query.token;
+    //console.log(id, tokenId);
     try { 
-        const user = await User.findOne({ _id: req.params.id });
+        const user = await User.findOne({ _id: id });
         if (!user) {
-            return res.status(400).json({ message: 'Usuário não encontrado!' });
+            return res.status(400).json({ message: 'Usuário não encontrado! ' + id });
         }
-        const token = await Token.findOne({ userId: user._id, token: req.params.token});
-
+        const token = await Token.findOne({ userId: user._id, token: tokenId});
         if (!token) {
             return res.status(400).json({ message: 'Token inválido!' });
         }
@@ -68,7 +67,7 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        if (user && bcrypt.compareSync(password, user.password)) { // compara a senha informada com a senha criptografada no banco
+        if (user && bcrypt.compareSync(password, user.password) && user.verified) { // compara a senha informada com a senha criptografada no banco
             const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET);
             return res.status(200).json({ message: 'Login realizado com sucesso!', token, id: user._id });
         } else {
