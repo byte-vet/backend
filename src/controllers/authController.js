@@ -27,7 +27,7 @@ const registerUser = async (req, res) => {
                 token: newToken.token
         }
 
-        const link = `https://bytevet.vercel.app/verify-email?token=${newToken.token}&id=${user._id}`; 
+        const link = `https://bytevet.vercel.app/verifyEmail?token=${newToken.token}&id=${user._id}`; 
 
         sendEmail(user.email, 'Verificação de conta', {name: user.fullName, link: link}, '../utils/template/emailVerification.handlebars'); // Envia o email
 
@@ -52,7 +52,7 @@ const emailVerification = async (req, res) => {
             return res.status(400).json({ message: 'Token inválido!' });
         }
 
-        await User.updateOne( { _id: user._id }, { $set: { isVerified: true } });
+        await User.updateOne( { _id: user._id }, { $set: { verified: true } });
         await token.deleteOne();
 
         res.status(200).json({ message: 'Email verificado com sucesso!' });
