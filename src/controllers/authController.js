@@ -27,7 +27,7 @@ const registerUser = async (req, res) => {
                 token: newToken.token
         }
 
-        const link = `https://bytevet.vercel.app/verifyEmail?token=${newToken.token}&id=${user._id}`; 
+        const link = `https://bytevet.vercel.app/verify-email?token=${newToken.token}&id=${user._id}`; 
 
         sendEmail(user.email, 'Verificação de conta', {name: user.fullName, link: link}, '../utils/template/emailVerification.handlebars'); // Envia o email
 
