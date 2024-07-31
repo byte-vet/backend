@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (req, res) => res.status(200).send('API - ByteVet'));
-app.listen(3000, () =>  console.log('Server is running on port 3000'));
+app.listen(3000, () => console.log('Server is running on port 3000'));
 
 
 app.use('/animais', animalRoutes); // http://localhost:3000/animais
