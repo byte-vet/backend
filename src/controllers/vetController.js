@@ -212,17 +212,64 @@ const getAllConsultasByAnimal = async (req, res) => {
     }
 }
 
-export { 
-    registerVet, 
-    loginVet, 
-    getVet, 
-    updateVet, 
-    createConsulta, 
-    getConsultaById, 
-    getConsultas, 
-    createHistorico, 
-    getAllVets, 
-    getAllAnimals, 
+const googleRegisterVet = async (req, res) => {
+    const { fullName, email, password, nomeClinica } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        if (password !== password) {
+            return res.status(400).json({ message: 'As senhas não conferem!' });
+        } else if (await Vet.findOne({ email })) {
+            return res.status(400).json({ message: 'Email já cadastrado.' });
+        }
+
+        const vet = await Vet.create({ fullName, email, password: hashedPassword, nomeClinica });
+        const newToken = jwt.sign({ id: vet._id }, process.env.JWT_SECRET);
+        console.log(newToken)
+        console.log(process.env.JWT_SECRET)
+
+        const data = {
+            id: vet._id,
+            fullName: vet.fullName,
+            email: vet.email,
+            nomeClinica: vet.nomeClinica,
+            token: newToken
+        }
+
+        res.status(201).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const googleLoginVet = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const vet = await Vet.findOne({ email });
+        if (vet && bcrypt.compareSync(password, vet.password)) { // compara a senha informada com a senha criptografada no banco
+            const token = jwt.sign({ id: vet._id }, process.env.JWT_SECRET);
+            console.log(token)
+            return res.status(200).json({ message: 'Login realizado com sucesso!', token, id: vet._id });
+        } else {
+            return res.status(401).json({ message: 'Email ou senha inválido.' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export {
+    registerVet,
+    loginVet,
+    getVet,
+    updateVet,
+    createConsulta,
+    getConsultaById,
+    getConsultas,
+    createHistorico,
+    getAllVets,
+    getAllAnimals,
     getAnimal,
-    getAllConsultasByAnimal
+    getAllConsultasByAnimal,
+    googleRegisterVet,
+    googleLoginVet
 };
