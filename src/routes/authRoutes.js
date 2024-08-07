@@ -1,6 +1,6 @@
 import express from 'express';
 import { registerUser, loginUser, requestResetPassword, resetPassword, emailVerification, googleLogin } from '../controllers/authController.js';
-import { registerVet, loginVet, getVet } from '../controllers/vetController.js'; // Importe as funções do controlador do veterinário
+import { registerVet, loginVet, getVet, googleRegisterVet, googleLoginVet } from '../controllers/vetController.js'; // Importe as funções do controlador do veterinário
 
 const router = express.Router();
 
@@ -12,5 +12,7 @@ router.post('/verifyEmail', emailVerification); // http://localhost:3000/auth/ve
 router.post('/vet/signup', registerVet); // Rota de registro de veterinário
 router.post('/vet/login', loginVet); // Rota de login de veterinário
 router.post('/google/login', googleLogin) // Rota de login com o Google
+router.post('/vet/google/signup', googleRegisterVet) // Rota de registro de veterinário via Google
+router.post('/vet/google/login', googleLoginVet) // Rota de login de veterinário via Google
 
 export default router;
